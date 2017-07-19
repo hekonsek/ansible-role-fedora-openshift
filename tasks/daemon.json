@@ -1,0 +1,1 @@
+{ "insecure-registries":["docker-registry-default.router.default.svc.cluster.local:80"] }
