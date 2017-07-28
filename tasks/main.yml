@@ -100,7 +100,7 @@
 
 - name: Waiting for Docker registry to start
   pause:
-    seconds: 5
+    seconds: 10
 
 - name: Testing Docker registry access
   uri:
