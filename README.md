@@ -11,7 +11,7 @@ This playbook has been tested against Fedora 25.
 
 ## Installation 
 
-    ansible-galaxy install hekonsek.fedora-openshift,0.2
+    ansible-galaxy install hekonsek.fedora-openshift,0.3
 
 ## Variables
 
@@ -22,7 +22,7 @@ This playbook has been tested against Fedora 25.
     - hosts: localhost
       remote_user: root
       roles:
-        - { role: hekonsek.fedora-openshift,0.2 }
+        - { role: hekonsek.fedora-openshift,0.3 }
 
 ## License
 
