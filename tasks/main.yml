@@ -27,7 +27,7 @@
     url: https://github.com/openshift/origin/releases/download/v1.5.1/openshift-origin-server-v1.5.1-7b451fc-linux-64bit.tar.gz
     dest: /tmp/openshift-origin-server-v1.5.1-7b451fc-linux-64bit.tar.gz
 
-- name: Unarchive Download OpenShift Origin
+- name: Unarchive downloaded OpenShift Origin archive
   unarchive:
     src: /tmp/openshift-origin-server-v1.5.1-7b451fc-linux-64bit.tar.gz
     dest: /usr/openshift
@@ -49,7 +49,10 @@
 
 - name: Give OpenShift time to create configuration
   pause:
-    seconds: 10
+    seconds: 20
+
+- name: Flush IP tables
+  command: iptables -F
 
 - name: Make OpenShift configuration readable
   file:
@@ -105,7 +108,7 @@
 
 - name: Waiting for Docker registry to start
   pause:
-    seconds: 10
+    seconds: 20
 
 - name: Testing Docker registry access
   uri:

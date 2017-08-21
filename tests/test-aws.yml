@@ -1,0 +1,6 @@
+- hosts: all
+  remote_user: fedora
+  become: true
+  roles:
+    - { role: hekonsek.fedora-docker,0.1 }
+    - { role: ../fedora-openshift }
