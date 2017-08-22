@@ -106,17 +106,12 @@
 - name: Add image-builder role to admin account
   command: /usr/bin/oadm policy add-role-to-user system:image-builder admin
 
-- name: Waiting for Docker registry to start
-  pause:
-    seconds: 20
-
 - name: Testing Docker registry access
   uri:
     url: http://docker-registry-default.router.default.svc.cluster.local/v2
     status_code: 401
     return_content: yes
   register: response
-
-- name: Verifying output from accessed Docker registry
-  fail:
-  when: "'authentication required' not in response.content"
+  until: "'authentication required' in response.content"
+  retries: 90
+  delay: 1
