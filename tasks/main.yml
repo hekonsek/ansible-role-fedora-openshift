@@ -1,14 +1,21 @@
-- name: Register insecure registry
+- name: Create Docker daemon configuration file
   copy:
     src: daemon.json
     dest: /etc/docker/daemon.json
     mode: 0664
+
+- name: Register insecure registry
+  replace:
+    path: /etc/docker/daemon.json
+    regexp: 'REGISTRY_URL'
+    replace: "docker-registry-default.{{router_host}}"
 
 - name: Add local DNS entry for Docker registry service
   lineinfile:
     path: /etc/hosts
     regexp: '^127.0.0.1 docker-registry-default.router.default.svc.cluster.local$'
     line: '127.0.0.1 docker-registry-default.router.default.svc.cluster.local'
+  when: 'router_host == "router.default.svc.cluster.local"'
 
 - name: Restart Docker engine
   systemd:
@@ -96,7 +103,7 @@
   command: /usr/bin/oc adm router
 
 - name: Expose Docker registry service
-  command: /usr/bin/oc expose service docker-registry
+  command: "oc expose service docker-registry --hostname=docker-registry-default.{{router_host}}"
   register: result
   failed_when: "'route \"docker-registry\" exposed' not in result.stdout and 'already exists' not in result.stderr"
 
@@ -106,9 +113,9 @@
 - name: Add image-builder role to admin account
   command: /usr/bin/oadm policy add-role-to-user system:image-builder admin
 
-- name: Testing Docker registry access
+- name: "Testing Docker registry access: http://docker-registry-default.{{router_host}}/v2"
   uri:
-    url: http://docker-registry-default.router.default.svc.cluster.local/v2
+    url: "http://docker-registry-default.{{router_host}}/v2"
     status_code: 401
     return_content: yes
   register: response

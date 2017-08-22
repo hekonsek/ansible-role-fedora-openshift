@@ -1,1 +1,2 @@
 project_name: default
+router_host: router.default.svc.cluster.local
