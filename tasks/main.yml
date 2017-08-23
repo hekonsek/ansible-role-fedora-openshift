@@ -54,9 +54,10 @@
     enabled: yes
     daemon_reload: yes
 
-- name: Give OpenShift time to create configuration
-  pause:
-    seconds: 20
+- name: Wait for OpenShift to create configuration files and start admin endpoint
+  wait_for:
+    host=localhost
+    port=8443
 
 - name: Flush IP tables
   command: iptables -F
